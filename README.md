@@ -57,7 +57,26 @@ class layer {
 		- void calculateNextPosition() // Calcula la siguiente posición espacial en función de la velocidad y el patrón asignado.
 }
 
-=== PlantUML definition of the case 1 ===
+# PlantUML definition of the case 1
+
+> Diagrama PlantUML que representa la arquitectura del juego, incluyendo el modelo de mutantes, sus poderes, equipos y el campo de batalla.
+
+---
+
+## Diagrama de Clases
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/94fbf554-8f4c-4919-90ca-a1024149d0f8" alt="PlantUML - Diagrama de Clases Mutants" width="100%"/>
+</p>
+
+---
+
+##  Código PlantUML
+
+<details>
+<summary> Ver código del diagrama</summary>
+
+```plantuml
 @startuml
 
 package model {
@@ -167,4 +186,3 @@ Battlefield ..> Team
 Battlefield ..> Scoreboard
 
 @enduml
-<img width="671" height="1419" alt="PlantUML" src="https://github.com/user-attachments/assets/94fbf554-8f4c-4919-90ca-a1024149d0f8" />
