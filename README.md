@@ -58,3 +58,113 @@ class layer {
 }
 
 === PlantUML definition of the case 1 ===
+@startuml
+
+package model {
+
+    class Mutant {
+        +id : int
+        +x : double
+        +y : double
+        +energy : int = 100
+        +defenseCapacity : int <<1..3>>
+        +power : MutantPower
+        +isAlive : boolean
+
+        -move() : void
+        -attack() : void
+        -defend() : void
+    }
+
+    class MutantPower {
+        +damageCapacity : int <<1..3 initial, max 7>>
+
+        -increaseDamage() : void
+    }
+
+    enum Powers {
+        FIRE
+        WATER
+        EARTH
+        WIND
+        ELECTRICITY
+        ROCK
+        LASER
+        BEAST
+        ICE
+        THORNS
+        SAND
+    }
+
+    MutantPower --> Powers : type
+    Mutant --> MutantPower : has
+}
+
+package layer {
+
+    class Battlefield {
+        +width : int
+        +height : int
+        +teamA : Team
+        +teamB : Team
+        +scoreboard : Scoreboard
+
+        -initializeTeams() : void
+        -checkGameOver() : void
+    }
+
+    class Team {
+        +name : String
+        +color : Color
+        +shield : String
+        +members : List<Mutant>
+
+        -addMember() : void
+        +hasAliveMembers() : boolean
+    }
+
+    class Scoreboard {
+        +aliveTeamA : int
+        +deadTeamA : int
+        +aliveTeamB : int
+        +deadTeamB : int
+
+        -updateScores() : void
+    }
+
+    class MovementEngine {
+        +speed : double
+        +x : double
+        +y : double
+        +radius : double
+        +pattern : Pattern
+
+        -calculateNextPosition() : void
+    }
+
+    enum Pattern {
+        LINEAR
+        CIRCULAR
+        RANDOM
+        ZIGZAG
+    }
+}
+
+'=========================
+' Relationships
+'=========================
+
+Battlefield *-- "1" Team : teamA
+Battlefield *-- "1" Team : teamB
+Battlefield *-- "1" Scoreboard
+
+Team *-- "3..11" Mutant : members
+
+Mutant --> MovementEngine : uses
+
+Scoreboard ..> Team : monitors
+Battlefield ..> Team
+Battlefield ..> Scoreboard
+
+@enduml
+<img width="671" height="1419" alt="PlantUML" src="https://github.com/user-attachments/assets/94fbf554-8f4c-4919-90ca-a1024149d0f8" />
