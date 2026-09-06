@@ -1,7 +1,7 @@
 #  Case 1 - Mutant Battle
 
 > **Bryan Leiva - Daniel Sánchez**  
-> Modelado y especificación de un juego de batalla entre mutantes, aplicando conceptos de POO como herencia, composición y polimorfismo.
+> Models and specifications of the game about mutants attacking themselves in the battlefield, using OOP concepts like inherence, composition, and polymorphism.
 
 ---
 
@@ -144,7 +144,7 @@ Patrones de movimiento disponibles:
 ##  Diagrama de Clases (PlantUML)
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/94fbf554-8f4c-4919-90ca-a1024149d0f8" alt="PlantUML - Diagrama de Clases Mutants" width="100%"/>
+  <img <img width="663" height="1427" alt="PlantUML_diagram" src="https://github.com/user-attachments/assets/faf5731c-c0c4-495c-804a-166f54986995"/>
 </p>
 
 ---
