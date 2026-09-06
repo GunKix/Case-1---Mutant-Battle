@@ -175,7 +175,6 @@ package model {
 
     class MutantPower {
         +damageCapacity : int <<1..3 initial, max 7>>
-
         -increaseDamage() : void
     }
 
@@ -235,7 +234,6 @@ package layer {
         +y : double
         +radius : double
         +pattern : Pattern
-
         -calculateNextPosition() : void
     }
 
@@ -251,16 +249,24 @@ package layer {
 ' Relationships
 '=========================
 
+' Composición (Battlefield tiene equipos y marcador)
 Battlefield *-- "1" Team : teamA
 Battlefield *-- "1" Team : teamB
 Battlefield *-- "1" Scoreboard
 
+' Composición (Team tiene mutantes)
 Team *-- "3..11" Mutant : members
 
-Mutant --> MovementEngine : uses
+' Composición (Mutant tiene un motor de movimiento)
+Mutant *-- "1" MovementEngine : has
 
+' Asociación (Mutant tiene un poder)
+Mutant --> MutantPower : has
+
+' ASOCIACIÓN: MovementEngine usa Pattern  <-- NUEVA RELACIÓN
+MovementEngine --> Pattern : uses
+
+' Dependencia (Scoreboard monitorea equipos)
 Scoreboard ..> Team : monitors
-Battlefield ..> Team
-Battlefield ..> Scoreboard
 
 @enduml
