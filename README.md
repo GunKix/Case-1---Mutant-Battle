@@ -144,7 +144,7 @@ Patrones de movimiento disponibles:
 ##  Diagrama de Clases (PlantUML)
 
 <p align="center">
-  <img <img width="663" height="1427" alt="PlantUML_diagram" src="https://github.com/user-attachments/assets/faf5731c-c0c4-495c-804a-166f54986995"/>
+<img width="2239" height="1924" alt="PlantUML_diagram" src="https://github.com/user-attachments/assets/a6d515f2-e39d-41fe-8206-104c3c999ac0" />
 </p>
 
 ---
@@ -156,117 +156,177 @@ Patrones de movimiento disponibles:
 
 ```plantuml
 @startuml
+skinparam packageStyle rectangle
 
 package model {
-
     class Mutant {
-        +id : int
-        +x : double
-        +y : double
-        +energy : int = 100
-        +defenseCapacity : int <<1..3>>
-        +power : MutantPower
-        +isAlive : boolean
-
-        -move() : void
-        -attack() : void
-        -defend() : void
+        + int id
+        + double x
+        + double y
+        + int energy
+        + int defenseCapacity
+        + MutantPower power
+        + boolean isAlive
+        - void move()
+        - void scan()
+        - void react()
+        - void attack()
+        - void defend()
     }
 
     class MutantPower {
-        +damageCapacity : int <<1..3 initial, max 7>>
-        -increaseDamage() : void
+        + String name
+        + int damageCapacity
+        + IPowerEffect effect
+        - void increaseDamage()
     }
 
-    enum Powers {
-        FIRE
-        WATER
-        EARTH
-        WIND
-        ELECTRICITY
-        ROCK
-        LASER
-        BEAST
-        ICE
-        THORNS
-        SAND
+    interface IPowerEffect {
+        + void applyEffect()
     }
 
-    MutantPower --> Powers : type
-    Mutant --> MutantPower : has
+    class FireEffect
+    class WaterEffect
+    class EarthEffect
+    class WindEffect
+    class ElectricityEffect
+    class RockEffect
+    class LaserEffect
+    class BeastEffect
+    class IceEffect
+    class ThornsEffect
+    class SandEffect
+
+    IPowerEffect <|.. FireEffect
+    IPowerEffect <|.. WaterEffect
+    IPowerEffect <|.. EarthEffect
+    IPowerEffect <|.. WindEffect
+    IPowerEffect <|.. ElectricityEffect
+    IPowerEffect <|.. RockEffect
+    IPowerEffect <|.. LaserEffect
+    IPowerEffect <|.. BeastEffect
+    IPowerEffect <|.. IceEffect
+    IPowerEffect <|.. ThornsEffect
+    IPowerEffect <|.. SandEffect
+
+    Mutant --> MutantPower : power
+    MutantPower --> IPowerEffect : effect
 }
 
-package layer {
-
+package game {
     class Battlefield {
-        +width : int
-        +height : int
-        +teamA : Team
-        +teamB : Team
-        +scoreboard : Scoreboard
-
-        -initializeTeams() : void
-        -checkGameOver() : void
+        + int width
+        + int height
+        + Team teamA
+        + Team teamB
+        + Scoreboard scoreboard
+        - void initializeTeams()
+        - void checkGameOver()
+        - void notifyScoreboard()
+        + void addObserver(Observer observer)
+        + void removeObserver(Observer observer)
+        + void notifyObservers()
     }
 
     class Team {
-        +name : String
-        +color : Color
-        +shield : String
-        +members : List<Mutant>
-
-        -addMember() : void
-        +hasAliveMembers() : boolean
+        + String name
+        + Color color
+        + String shield
+        + List<Mutant> members
+        - void addMember()
+        + boolean hasAliveMembers()
     }
 
     class Scoreboard {
-        +aliveTeamA : int
-        +deadTeamA : int
-        +aliveTeamB : int
-        +deadTeamB : int
-
-        -updateScores() : void
+        + int aliveTeamA
+        + int deadTeamA
+        + int aliveTeamB
+        + int deadTeamB
+        + void updateScores(int aliveA, int deadA, int aliveB, int deadB)
     }
 
+    Battlefield --> Team : teamA, teamB
+    Battlefield --> Scoreboard : scoreboard
+    Team o--> model.Mutant : members
+}
+
+package control {
     class MovementEngine {
-        +speed : double
-        +x : double
-        +y : double
-        +radius : double
-        +pattern : Pattern
-        -calculateNextPosition() : void
+        + double speed
+        + IMovementPattern pattern
+        - void calculateNextPosition()
     }
 
-    enum Pattern {
-        LINEAR
-        CIRCULAR
-        RANDOM
-        ZIGZAG
+    interface IMovementPattern {
+        + void move(Mutant mutant, Battlefield battlefield)
+    }
+
+    class CombatManager {
+        + double radius
+        - void evaluateProximities()
+        - void executeParallelEncounters()
+    }
+
+    class MovementThread {
+        - void run()
+    }
+
+    class CombatThread {
+        - void run()
+    }
+
+    MovementEngine --> IMovementPattern : pattern
+    MovementEngine ..> model.Mutant : uses
+    MovementEngine ..> game.Battlefield : uses
+    IMovementPattern ..> model.Mutant : uses
+    IMovementPattern ..> game.Battlefield : uses
+    CombatManager ..> model.Mutant : uses
+    CombatManager ..> game.Battlefield : uses
+    MovementThread --> MovementEngine : executes
+    CombatThread --> CombatManager : executes
+    MovementEngine ..> constants.IConstants : uses
+    CombatManager ..> constants.IConstants : uses
+}
+
+package constants {
+    interface IConstants {
+        + int initialEnergy
+        + int minDefenseCapacity
+        + int maxDefenseCapacity
+        + int minDamageCapacity
+        + int initialMaxDamageCapacity
+        + int maxDamageCapacity
+        + int minTeamSize
+        + int maxTeamSize
+        + double defaultSpeed
+        + double defaultCombatRadius
+        + int refreshRate
     }
 }
 
-'=========================
-' Relationships
-'=========================
+package ui {
+    interface Observer {
+        + void update()
+    }
 
-' Composición (Battlefield tiene equipos y marcador)
-Battlefield *-- "1" Team : teamA
-Battlefield *-- "1" Team : teamB
-Battlefield *-- "1" Scoreboard
+    class GameView {
+        + void update()
+        - void drawBattlefield()
+        - void drawMutants()
+        - void drawScoreboard()
+        - void showWinner()
+    }
 
-' Composición (Team tiene mutantes)
-Team *-- "3..11" Mutant : members
+    class GameController {
+        - void startGame()
+        - void restartGame()
+    }
 
-' Composición (Mutant tiene un motor de movimiento)
-Mutant *-- "1" MovementEngine : has
+    Observer <|.. GameView
+    GameView ..> game.Battlefield : reads
+    GameController --> game.Battlefield : controls
+}
 
-' Asociación (Mutant tiene un poder)
-Mutant --> MutantPower : has
-
-' ASOCIACIÓN: MovementEngine usa Pattern  <-- NUEVA RELACIÓN
-MovementEngine --> Pattern : uses
-
-' Dependencia (Scoreboard monitorea equipos)
-Scoreboard ..> Team : monitors
-
+game.Battlefield --> ui.Observer : notifies
+game.Battlefield ..> constants.IConstants : uses
 @enduml
