@@ -143,6 +143,8 @@
         * `- void startGame()` // Inicia una nueva partida
         * `- void restartGame()` // Permite iniciar una nueva partida después de terminar
 
+---
+
 ##  Diagrama de Clases (PlantUML)
 
 <p align="center">
