@@ -3,143 +3,145 @@
 > **Bryan Leiva - Daniel Sánchez**  
 > Models and specifications of the game about mutants attacking themselves in the battlefield, using OOP concepts like inherence, composition, and polymorphism.
 
----
+## Spec definition
 
-##  Especificación del Caso 1
+* **`package model`**
+* **`class Mutant`** // Representa a un mutante individual dentro de la partida
+* `+ int id` // Identificador unico del mutante
+* `+ double x` // Coordenada horizontal del mutante en el Battlefield
+* `+ double y` // Coordenada vertical del mutante en el Battlefield
+* `+ int energy (100)` // Energia inicial del mutante
+* `+ int defenseCapacity (1->3)` // Capacidad defensiva asignada al mutante
+* `+ MutantPower power` // Poder que posee el mutante, como maximo uno
+* `+ boolean isAlive` // Indica si el mutante continúa vivo
+* `- void move()` // Solicita al MovementEngine calcular su siguiente posicion
+* `- void scan()` // Detecta oponentes dentro del radio de combate
+* `- void react()` // Decide si atacar o defenderse ante un oponente
+* `- void attack()` // Ejecuta un ataque contra el oponente detectado
+* `- void defend()` // Ejecuta la acción defensiva del mutante
 
-###  Paquete `model`
+* **`class MutantPower`** // Representa el poder que posee un mutante y su capacidad de daño
+* `+ int damageCapacity (1->3 inicial, hasta 7 máximo)` // Capacidad de daño actual del poder
+* `+ IPowerEffect effect` // Efecto asociado al poder mediante polimorfismo
+* `- void increaseDamage()` // Incrementa el daño sin superar el máximo de 7
 
-#### Clase `Mutant`
+* **`interface IPowerEffect`** // Define el comportamiento que implementan los efectos de los diferentes poderes
+* `+ void applyEffect()` // Ejecuta el efecto particular del poder
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `id` | `int` | Identificador único del mutante |
-| `x` | `double` | Posición en el eje X del campo |
-| `y` | `double` | Posición en el eje Y del campo |
-| `energy` | `int` | Energía actual (inicial: 100) |
-| `defenseCapacity` | `int` | Capacidad de defensa (valor entre 1 y 3) |
-| `power` | `MutantPower` | Poder asociado al mutante |
-| `isAlive` | `boolean` | Estado de vida del mutante |
+* **`class FireEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder fire
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `move()` | `private` | Actualiza las coordenadas del mutante según su motor de movimiento dentro de los límites del campo |
-| `attack()` | `private` | Reduce la energía del oponente considerando el daño del poder y si el objetivo se defendió |
-| `defend()` | `private` | Activa el estado temporal de defensa para mitigar el impacto del próximo ataque recibido |
+* **`class WaterEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder water
 
----
+* **`class EarthEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder earth
 
-#### Clase `MutantPower`
+* **`class WindEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder wind
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `damageCapacity` | `int` | Capacidad de daño (inicial entre 1 y 3, máximo 7) |
-| `type` | `Powers` | Tipo de poder (ver enumeración) |
+* **`class ElectricityEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder electricity
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `increaseDamage()` | `private` | Incrementa en una unidad la capacidad de daño del poder si no supera el límite máximo de 7 |
+* **`class RockEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder rock
 
----
+* **`class LaserEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder laser
 
-#### Enumeración `Powers`
+* **`class BeastEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder beast
 
-Lista de tipos de poderes disponibles:
+* **`class IceEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder ice
 
-| Valor |
-|-------|
-| `FIRE` |
-| `WATER` |
-| `EARTH` |
-| `WIND` |
-| `ELECTRICITY` |
-| `ROCK` |
-| `LASER` |
-| `BEAST` |
-| `ICE` |
-| `THORNS` |
-| `SAND` |
+* **`class ThornsEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder thorns
 
----
+* **`class SandEffect implements IPowerEffect`**
+* `+ void applyEffect()` // Ejecuta el efecto del poder sand
 
-### Paquete `layer`
 
-#### Clase `Battlefield`
+* **Game Layer (`package game`)**
+* **`class Battlefield`** // Representa el campo donde se desarrolla la batalla
+* `+ int width` // Ancho del area de batalla
+* `+ int height` // Alto del area de batalla
+* `+ Team teamA` // Primer equipo participante
+* `+ Team teamB` // Segundo equipo participante
+* `+ Scoreboard scoreboard` // Marcador de la partida
+* `- void initializeTeams()` // Crea ambos equipos con la misma cantidad de mutantes
+* `- void checkGameOver()` // Comprueba si algun equipo perdió todos sus mutantes
+* `- void notifyScoreboard()` // Comunica al Scoreboard el estado actual de los equipos
+* `+ void addObserver(Observer observer)` // Registra un observador para recibir cambios del Battlefield
+* `+ void removeObserver(Observer observer)` // Elimina un observador previamente registrado
+* `+ void notifyObservers()` // Notifica a los observadores cuando cambia el estado del Battlefield
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `width` | `int` | Ancho del campo de batalla |
-| `height` | `int` | Alto del campo de batalla |
-| `teamA` | `Team` | Equipo A |
-| `teamB` | `Team` | Equipo B |
-| `scoreboard` | `Scoreboard` | Marcador del juego |
+* **`class Team`** // Representa un equipo y los mutantes que lo conforman
+* `+ String name` // Nombre utilizado para identificar al equipo
+* `+ Color color` // Color utilizado para identificar visualmente al equipo
+* `+ String shield` // Escudo o simbolo utilizado para identificar al equipo
+* `+ List<Mutant> members (3->11)` // Lista de mutantes pertenecientes al equipo
+* `- void addMember()` // Añade un mutante sin superar el maximo permitido
+* `+ boolean hasAliveMembers()` // Indica si el equipo conserva mutantes vivos
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `initializeTeams()` | `private` | Genera y configura ambos equipos con un tamaño simétrico válido entre 3 y 11 integrantes |
-| `checkGameOver()` | `private` | Comprueba si algún equipo se quedó sin mutantes vivos para finalizar la partida |
+* **`class Scoreboard`** // Representa el marcador que mantiene el estado de mutantes vivos y muertos
+* `+ int aliveTeamA` // Cantidad actual de mutantes vivos del equipo A
+* `+ int deadTeamA` // Cantidad actual de mutantes muertos del equipo A
+* `+ int aliveTeamB` // Cantidad actual de mutantes vivos del equipo B
+* `+ int deadTeamB` // Cantidad actual de mutantes muertos del equipo B
+* `+ void updateScores(int aliveA, int deadA, int aliveB, int deadB)` // Actualiza los contadores de ambos equipos
 
----
 
-#### Clase `Team`
+* **Control Layer (`package control`)**
+* **`class MovementEngine`** // Controla el calculo del movimiento de los mutantes
+* `+ double speed` // Velocidad utilizada para calcular el desplazamiento
+* `+ IMovementPattern pattern` // Patrón de movimiento seleccionado mediante polimorfismo
+* `- void calculateNextPosition()` // Calcula la siguiente posición dentro del Battlefield
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `name` | `String` | Nombre del equipo |
-| `color` | `Color` | Color representativo |
-| `shield` | `String` | Escudo del equipo |
-| `members` | `List<Mutant>` | Lista de mutantes (entre 3 y 11) |
+* **`interface IMovementPattern`** // Define una estrategia de movimiento para los mutantes
+* `+ void move(Mutant mutant, Battlefield battlefield)` // Define la estrategia de movimiento del mutante
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `addMember()` | `private` | Añade un nuevo mutante a la lista del equipo verificando que no exceda el límite permitido |
-| `hasAliveMembers()` | `public` | Retorna `true` si al menos un miembro del equipo sigue vivo |
+* **`class CombatManager`** // Coordina la detección y ejecución de los encuentros entre mutantes
+* `+ double radius` // Distancia necesaria para detectar un encuentro
+* `- void evaluateProximities()` // Detecta oponentes que se encuentran dentro del radio
+* `- void executeParallelEncounters()` // Coordina encuentros que pueden ocurrir simultaneamente
 
----
+* **`class MovementThread`** // Representa el hilo encargado del movimiento automatico
+* `- void run()` // Ejecuta continuamente el movimiento automatico de los mutantes
 
-#### Clase `Scoreboard`
+* **`class CombatThread`** // Representa el hilo encargado de los encuentros de combate
+* `- void run()` // Ejecuta continuamente los encuentros de combate
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `aliveTeamA` | `int` | Cantidad de mutantes vivos del equipo A |
-| `deadTeamA` | `int` | Cantidad de mutantes muertos del equipo A |
-| `aliveTeamB` | `int` | Cantidad de mutantes vivos del equipo B |
-| `deadTeamB` | `int` | Cantidad de mutantes muertos del equipo B |
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `updateScores()` | `private` | Modifica los contadores de mutantes vivos y muertos de cada equipo según su estado actual |
+* **Constants (`package constants`)**
+* **`interface IConstants`** // Centraliza los valores fijos y parametros configurables del juego
+* `+ int initialEnergy = 100` // Energia inicial de cada mutante
+* `+ int minDefenseCapacity = 1` // Capacidad defensiva minima
+* `+ int maxDefenseCapacity = 3` // Capacidad defensiva maxima
+* `+ int minDamageCapacity = 1` // Daño inicial minimo de un poder
+* `+ int initialMaxDamageCapacity = 3` // Daño inicial maximo de un poder
+* `+ int maxDamageCapacity = 7` // Daño maximo que puede alcanzar un poder
+* `+ int minTeamSize = 3` // Cantidad minima de mutantes por equipo
+* `+ int maxTeamSize = 11` // Cantidad maxima de mutantes por equipo
+* `+ double defaultSpeed` // Velocidad predeterminada de movimiento
+* `+ double defaultCombatRadius` // Radio predeterminado de combate
+* `+ int refreshRate` // Frecuencia configurable de actualización visual
 
----
 
-#### Clase `MovementEngine`
+* **UI Layer (`package ui`)**
+* **`interface Observer`** // Define el mecanismo para recibir notificaciones sobre cambios del juego
+* `+ void update()` // Actualiza el observador cuando cambia el estado del Battlefield
 
-| Atributo | Tipo | Descripción |
-|----------|------|-------------|
-| `speed` | `double` | Velocidad de movimiento |
-| `x` | `double` | Posición actual en X |
-| `y` | `double` | Posición actual en Y |
-| `radius` | `double` | Radio de influencia o alcance |
-| `pattern` | `Pattern` | Patrón de movimiento asignado |
+* **`class GameView`** // GameView solo representa información y no implementa lógica del juego
+* `+ void update()` // Actualiza la representacion visual de la partida
+* `- void drawBattlefield()` // Dibuja visualmente el area de batalla
+* `- void drawMutants()` // Dibuja los mutantes y muestra su estado actual
+* `- void drawScoreboard()` // Muestra los mutantes vivos, muertos y su energia
+* `- void showWinner()` // Muestra el equipo ganador al finalizar la partida
 
-| Método | Visibilidad | Descripción |
-|--------|-------------|-------------|
-| `calculateNextPosition()` | `private` | Calcula la siguiente posición espacial en función de la velocidad y el patrón asignado |
-
----
-
-#### Enumeración `Pattern`
-
-Patrones de movimiento disponibles:
-
-| Valor |
-|-------|
-| `LINEAR` |
-| `CIRCULAR` |
-| `RANDOM` |
-| `ZIGZAG` |
-
----
+* **`class GameController`** // GameController coordina las acciones de la interfaz con el juego
+* `- void startGame()` // Inicia una nueva partida
+* `- void restartGame()` // Permite iniciar una nueva partida después de terminar
 
 ##  Diagrama de Clases (PlantUML)
 
