@@ -1,0 +1,70 @@
+<!DOCTYPE html> <!-- Declara que este archivo es un documento HTML moderno (HTML5) -->
+<html lang="es"> <!-- Etiqueta raíz del documento, con idioma configurado a español -->
+<head> <!-- Zona de metadatos: no se muestra en pantalla -->
+    <!-- Juego de caracteres UTF-8 para soportar tildes y símbolos -->
+    <meta charset="UTF-8">
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>Combate de Mutantes</title>
+    <!-- Vincula la hoja de estilos externa (estilos visuales) -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body> <!-- Cuerpo del documento: aquí se dibuja todo lo visible -->
+    <!-- Contenedor principal del juego: el "escenario" completo -->
+    <div id="game-arena">
+
+        <!-- Área de combate: zona superior donde pelean los personajes -->
+        <div class="battlefield">
+            <!-- Mutante del jugador: envuelve sprite + barra de vida -->
+            <div class="character player">
+                <!-- Imagen del sprite del mutante controlado por el jugador -->
+                <img id="player-sprite" src="../Imagenes/bestia.webp" alt="Mutante Bestia">
+                <!-- Contenedor de la barra de vida del jugador -->
+                <div class="health-bar"><div class="health-fill" style="width: 100%;"></div></div>
+            </div>
+
+            <!-- Enemigo (ejemplo): igual estructura que el jugador -->
+            <div class="character enemy">
+                <!-- Imagen del sprite del enemigo -->
+                <img id="enemy-sprite" src="../Imagenes/bestia.webp" alt="Enemigo">
+                <!-- Contenedor de la barra de vida del enemigo -->
+                <div class="health-bar"><div class="health-fill" style="width: 100%;"></div></div>
+            </div>
+
+            <!-- Contenedor para la animación del poder (proyectil) que va del jugador al enemigo -->
+            <img id="power-animation" src="" alt="Poder" style="display: none;">
+        </div>
+
+        <!-- Interfaz de Usuario (UI): panel inferior con los botones de ataque -->
+        <div class="ui-panel">
+            <!-- Título del panel -->
+            <h3>Selecciona un Ataque:</h3>
+            <!-- Contenedor donde se agrupan los botones de poderes -->
+            <div class="powers-container">
+                <!-- Botón que dispara el poder de agua -->
+                <button onclick="attack('agua')">
+                    <img src="../Imagenes/agua.webp" alt="Agua"> Agua <!-- Miniatura y nombre del poder -->
+                </button>
+                <!-- Botón que dispara el poder de arena -->
+                <button onclick="attack('arena')">
+                    <img src="../Imagenes/arena.webp" alt="Arena"> Arena <!-- Miniatura y nombre del poder -->
+                </button>
+                <!-- Botón que dispara el poder de espinas -->
+                <button onclick="attack('espinas')">
+                    <img src="../Imagenes/espinas.webp" alt="Espinas"> Espinas <!-- Miniatura y nombre del poder -->
+                </button>
+                <!-- Botón que dispara el poder de fuego -->
+                <button onclick="attack('fuego')">
+                    <img src="../Imagenes/fuego.webp" alt="Fuego"> Fuego <!-- Miniatura y nombre del poder -->
+                </button>
+                <!-- Botón que dispara el poder de hielo -->
+                <button onclick="attack('hielo')">
+                    <img src="../Imagenes/hielo.webp" alt="Hielo"> Hielo <!-- Miniatura y nombre del poder -->
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carga el script externo que contiene toda la lógica del combate -->
+    <script src="game.js"></script>
+</body>
+</html>

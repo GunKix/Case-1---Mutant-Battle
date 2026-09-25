@@ -1,0 +1,129 @@
+/* Regla aplicada al elemento <body>: define los estilos globales de la página */
+body {
+    margin: 0; /* Quita los márgenes que el navegador pone por defecto */
+    font-family: Arial, sans-serif; /* Establece la tipografía base de la página */
+    background-color: #222; /* Pinta el fondo de la página con un gris oscuro */
+    color: white; /* Hace que todo el texto de la página sea de color blanco */
+    display: flex; /* Activa el modelo de caja flexible (flexbox) */
+    justify-content: center; /* Centra los hijos horizontalmente en el eje X */
+    align-items: center; /* Centra los hijos verticalmente en el eje Y */
+    height: 100vh; /* El body ocupa el 100% de la altura de la ventana */
+}
+
+/* Regla del contenedor principal del juego (el "escenario") */
+#game-arena {
+    width: 800px; /* Define el ancho fijo del escenario */
+    height: 600px; /* Define la altura fija del escenario */
+    background-image: url('../Imagenes/background.png'); /* Carga la imagen de fondo desde la carpeta Imagenes */
+    background-size: cover; /* Hace que la imagen de fondo cubra todo el contenedor */
+    position: relative; /* Permite posicionar hijos de forma absoluta dentro de él */
+    border: 4px solid #444; /* Dibuja un borde gris de 4 píxeles alrededor */
+    border-radius: 10px; /* Redondea las esquinas del borde */
+    overflow: hidden; /* Oculta cualquier elemento que se salga del contenedor */
+}
+
+/* Regla del área donde se colocan los personajes (parte superior) */
+.battlefield {
+    height: 70%; /* El campo ocupa el 70% de la altura del escenario */
+    position: relative; /* Contexto de posicionamiento para el proyectil */
+    display: flex; /* Usa flexbox para acomodar a los personajes */
+    justify-content: space-between; /* Separa jugador y enemigo a los extremos opuestos */
+    padding: 0 50px; /* Deja un espacio interno de 50px a los lados */
+    align-items: center; /* Alinea verticalmente a los personajes al centro */
+}
+
+/* Regla compartida por los dos personajes (jugador y enemigo) */
+.character {
+    text-align: center; /* Centra el contenido (imagen y barra de vida) */
+}
+
+/* Regla de las imágenes dentro de los personajes */
+.character img {
+    width: 150px; /* Ancho fijo de la imagen del mutante */
+    height: 150px; /* Alto fijo de la imagen del mutante */
+    object-fit: contain; /* Escala la imagen sin deformarla dentro del recuadro */
+    transition: transform 0.2s; /* Anima de forma suave cualquier cambio de escala o posición */
+}
+
+/* Animación aplicada al sprite cuando el mutante ataca */
+.attacking {
+    transform: scale(1.1) translateX(20px); /* Agranda el mutante un 10% y lo desplaza 20px a la derecha */
+}
+
+/* Regla del contenedor de la barra de vida */
+.health-bar {
+    width: 100%; /* La barra ocupa todo el ancho de su contenedor */
+    height: 15px; /* Altura fija de la barra */
+    background: red; /* Fondo rojo representa la vida perdida */
+    border: 2px solid white; /* Borde blanco para ver los límites de la barra */
+    margin-top: 10px; /* Separa la barra de la imagen del mutante */
+}
+
+/* Regla del relleno verde que indica la vida restante */
+.health-fill {
+    background: green; /* Color verde representa la vida que queda */
+    height: 100%; /* Ocupa toda la altura del contenedor .health-bar */
+    transition: width 0.3s; /* Anima el cambio de ancho cuando la vida baja */
+}
+
+/* Regla del panel inferior que contiene los botones de poderes */
+.ui-panel {
+    height: 30%; /* El panel ocupa el 30% restante del escenario */
+    background: rgba(0, 0, 0, 0.8); /* Fondo negro semitransparente (80% opaco) */
+    padding: 15px; /* Espacio interno alrededor del contenido del panel */
+    box-sizing: border-box; /* Incluye el padding dentro del alto del panel */
+}
+
+/* Regla del contenedor de los botones de poderes */
+.powers-container {
+    display: flex; /* Coloca los botones en una fila flexible */
+    gap: 10px; /* Deja 10px de separación entre cada botón */
+    justify-content: center; /* Centra los botones horizontalmente */
+}
+
+/* Regla que estiliza cada botón de poder */
+button {
+    background: #333; /* Fondo gris oscuro del botón */
+    color: white; /* Texto del botón en blanco */
+    border: 2px solid #555; /* Borde gris alrededor del botón */
+    padding: 10px; /* Espacio interno del botón */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+    border-radius: 8px; /* Redondea las esquinas del botón */
+    display: flex; /* Usa flexbox para apilar imagen y texto */
+    flex-direction: column; /* Apila el contenido en vertical (imagen arriba, texto abajo) */
+    align-items: center; /* Centra la imagen y el texto del botón */
+    transition: background 0.2s; /* Anima suavemente el cambio de color */
+}
+
+/* Regla que se aplica al botón cuando el ratón pasa por encima */
+button:hover {
+    background: #555; /* Aclara el fondo del botón al pasar el cursor */
+}
+
+/* Regla de la imagen dentro de cada botón de poder */
+button img {
+    width: 40px; /* Ancho de la miniatura del poder */
+    height: 40px; /* Alto de la miniatura del poder */
+    margin-bottom: 5px; /* Separa la imagen del texto del botón */
+}
+
+/* Regla del proyectil que vuela del jugador al enemigo */
+#power-animation {
+    position: absolute; /* Se posiciona libremente dentro de .battlefield */
+    width: 100px; /* Ancho del proyectil */
+    height: 100px; /* Alto del proyectil */
+    left: 150px; /* Posición inicial: cerca del jugador (izquierda) */
+    z-index: 10; /* Asegura que el proyectil quede por encima de los personajes */
+}
+
+/* Definición de la animación "castPower" (movimiento del proyectil) */
+@keyframes castPower {
+    0% { left: 150px; opacity: 1; transform: scale(0.5); } /* Inicio: junto al jugador, al 50% de tamaño */
+    50% { transform: scale(1.2); } /* Mitad: el proyectil crece a 120% */
+    100% { left: 550px; opacity: 1; transform: scale(1); } /* Final: llega al enemigo con tamaño normal */
+}
+
+/* Clase temporal que se añade al proyectil para ejecutar la animación */
+.animate-attack {
+    animation: castPower 0.8s forwards; /* Ejecuta la animación en 0.8s y conserva el estado final */
+}
