@@ -2,7 +2,7 @@
 
 > **Bryan Leiva - Daniel Sánchez**  
 > Models and specifications of the game about mutants attacking themselves in the battlefield, using OOP concepts like inherence, composition, and polymorphism.
-
+> Archivos requeridos para pruebas oficiales: archivo constants, game, control, imagenes, model, resources, iu, main.java. Estos según los commits ejecutados recientemente
 ## Spec definition
 
 * **`package model`**
